@@ -1291,7 +1291,7 @@ function Library:CreateWindow(p)
 	ScrollingFrame_2.MidImage = "rbxasset://textures/ui/Scroll/scroll-middle.png"
 	ScrollingFrame_2.ScrollBarImageColor3 = Color3.fromRGB(91,68,209)
 	ScrollingFrame_2.ScrollBarImageTransparency = 0
-	ScrollingFrame_2.ScrollBarThickness = 2
+	ScrollingFrame_2.ScrollBarThickness = 0
 	ScrollingFrame_2.ScrollingDirection = Enum.ScrollingDirection.XY
 	ScrollingFrame_2.TopImage = "rbxasset://textures/ui/Scroll/scroll-top.png"
 	ScrollingFrame_2.VerticalScrollBarInset = Enum.ScrollBarInset.None
