@@ -1663,6 +1663,8 @@ function Library:CreateWindow(p)
 				Section_1.Text = t
 			end
 
+			task.wait(0.1)
+
 			return New
 		end
 
