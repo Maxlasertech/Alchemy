@@ -1669,6 +1669,7 @@ function Library:CreateWindow(p)
 		end
 
 		function Func:Toggle(p)
+			task.wait()
 			local Value = p.Value or false
 			local Image = p.Image or ''
 			local Callback = p.Callback or function() end
@@ -2676,6 +2677,7 @@ function Library:CreateWindow(p)
 		end
 
 		function Func:Dropdown(p)
+			task.wait()
 			local Title = p.Title or 'null'
 			local Desc = p.Content or ''
 			local Image = p.Image or ''
