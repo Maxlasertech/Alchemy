@@ -828,7 +828,7 @@ do
 			local TextLabel_1 = Instance.new("TextLabel")
 
 			Item_1.Name = "Item"
-			Item_1 = index
+			Item_1.LayoutOrder = index or 0
 			Item_1.Parent = ScrollingFrame_1
 			Item_1.BackgroundColor3 = Color3.fromRGB(255,255,255)
 			Item_1.BackgroundTransparency = 0.95
