@@ -3,6 +3,11 @@
 Library = {}
 SaveTheme = {}
 
+local formatNumber = function(n)
+    n = tostring(n)
+    return n:reverse():gsub("%d%d%d", "%1,"):reverse():gsub("^,", "")
+end
+
 local themes = {
 	index = {'Dark'},
 	Dark = {
@@ -1896,6 +1901,7 @@ function Library:CreateWindow(p)
 			local Title = p.Title or 'null'
 			local Desc = p.Content or ''
 			local Suffix = p.Suffix or ''
+			local FormatNum = p.Format or false
 			local Image = p.Image or ''
 			local Min = p.Value.Min or 0
 			local Max = p.Value.Max or 100
@@ -2051,7 +2057,8 @@ function Library:CreateWindow(p)
 				else
 					suffer = Suffix(value)
 				end
-				TextBox_1.Text = suffer.. tostring(roundToDecimal(value, Rounding))
+				local b = tostring(roundToDecimal(value, Rounding))
+				TextBox_1.Text = suffer.. FormatNum and formatNumber(b) or b
 				task.spawn(Callback ,value)
 			end
 
