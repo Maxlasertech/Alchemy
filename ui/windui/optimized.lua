@@ -2058,7 +2058,7 @@ function Library:CreateWindow(p)
 					suffer = Suffix(value)
 				end
 				local b = tostring(roundToDecimal(value, Rounding))
-				TextBox_1.Text = suffer.. FormatNum and formatNumber(b) or b
+				TextBox_1.Text = suffer.. (FormatNum and formatNumber(b) or b)
 				task.spawn(Callback ,value)
 			end
 
