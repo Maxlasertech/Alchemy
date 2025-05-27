@@ -1895,6 +1895,7 @@ function Library:CreateWindow(p)
 		function Func:Slider(p)
 			local Title = p.Title or 'null'
 			local Desc = p.Content or ''
+			local Suffix = p.Suffix or ''
 			local Image = p.Image or ''
 			local Min = p.Value.Min or 0
 			local Max = p.Value.Max or 100
@@ -2044,7 +2045,7 @@ function Library:CreateWindow(p)
 				Value = value
 				local va = (value - Min) / (Max - Min)
 				tw({v = Frame_3, t = 0.15, s = Enum.EasingStyle.Exponential, d = "Out", g = {Size = UDim2.new(math.clamp(va, 0.12, 1), 0, 1, 0)}}):Play()
-				TextBox_1.Text = tostring(roundToDecimal(value, Rounding))
+				TextBox_1.Text = Suffix.. tostring(roundToDecimal(value, Rounding))
 				task.spawn(Callback ,value)
 			end
 
