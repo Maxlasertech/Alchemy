@@ -2045,7 +2045,13 @@ function Library:CreateWindow(p)
 				Value = value
 				local va = (value - Min) / (Max - Min)
 				tw({v = Frame_3, t = 0.15, s = Enum.EasingStyle.Exponential, d = "Out", g = {Size = UDim2.new(math.clamp(va, 0.12, 1), 0, 1, 0)}}):Play()
-				TextBox_1.Text = Suffix.. tostring(roundToDecimal(value, Rounding))
+				local suffer 
+				if typeof(Suffix) == 'string' then
+					suffer = Suffix
+				else
+					suffer = Suffix(value)
+				end
+				TextBox_1.Text = suffer.. tostring(roundToDecimal(value, Rounding))
 				task.spawn(Callback ,value)
 			end
 
