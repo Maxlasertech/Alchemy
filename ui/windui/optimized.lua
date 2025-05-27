@@ -3,11 +3,6 @@
 Library = {}
 SaveTheme = {}
 
-local formatNumber = function(n)
-    n = tostring(n)
-    return n:reverse():gsub("%d%d%d", "%1,"):reverse():gsub("^,", "")
-end
-
 local themes = {
 	index = {'Dark'},
 	Dark = {
@@ -94,6 +89,20 @@ local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = gethui and gethui() or game.CoreGui or game:GetService("Players").LocalPlayer.PlayerGui
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 pgui(ScreenGui)
+
+local names = {"K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dd", "Ud", "Dd", "Td", "Qad", "Qid", 
+	"Sxd", "Spd", "Ocd", "Nod", "Vg", "Uvg", "Dvg", "Tvg", "Qavg", "Qivg", "Sxvg", "Spvg", "Ocvg"}
+local pows = {}
+
+for i = 1, #names do table.insert(pows, 1000^i) end
+
+local function formatNumber(x: number): string 
+	local ab = math.abs(x)
+	if ab < 1000 then return tostring(x) end 
+	local p = math.min(math.floor(math.log10(ab)/3), #names)
+	local num = math.floor(ab/pows[p]*100)/100
+	return num*math.sign(x)..names[p]
+end
 
 local U, Tw = game:GetService("UserInputService"), game:GetService("TweenService")
 
@@ -1900,13 +1909,27 @@ function Library:CreateWindow(p)
 		function Func:Slider(p)
 			local Title = p.Title or 'null'
 			local Desc = p.Content or ''
-			local Suffix = p.Suffix or ''
+			local Suffix = p.Suffix or {
+                Text = ''
+            }
+            if not p.Suffix then
+                text = ''
+            else
+                if typeof(p.Suffix.Text) == 'string' then
+                    p.Suffix.Text = p.Suffix.Left and p.Suffix.Text or ' '..p.Suffix.Text
+                elseif typeof(p.Suffix.Text) == 'function' then
+                    local old = p.Suffix.Text
+                    p.Suffix.Text = function(val)
+                        return p.Suffix.Left and old(val) or ' '.. old(val)
+                    end
+                end
+            end
 			local FormatNum = p.Format or false
 			local Image = p.Image or ''
 			local Min = p.Value.Min or 0
 			local Max = p.Value.Max or 100
 			local Value = p.Value.Default or Min + 1
-			local Rounding = p.Rounding or 2
+			local Rounding = p.Value.Rounding or p.Rounding or 2
 			local Callback = p.Callback or function() end
 
 			local Slider, Config = background(ScrollingFrame_1, Title, Desc, Image, 'Slider')
@@ -2051,15 +2074,25 @@ function Library:CreateWindow(p)
 				Value = value
 				local va = (value - Min) / (Max - Min)
 				tw({v = Frame_3, t = 0.15, s = Enum.EasingStyle.Exponential, d = "Out", g = {Size = UDim2.new(math.clamp(va, 0.12, 1), 0, 1, 0)}}):Play()
-				local suffer 
-				if typeof(Suffix) == 'string' then
-					suffer = Suffix
-				else
-					suffer = Suffix(value)
-				end
-				local b = tostring(roundToDecimal(value, Rounding))
-				TextBox_1.Text = suffer.. (FormatNum and formatNumber(b) or b)
-				task.spawn(Callback ,value)
+				local suffer = tostring(roundToDecimal(value, Rounding))
+                if FormatNum then
+                    suffer = formatNumber(suffer)
+                end
+				if typeof(Suffix.Text) == 'function' then
+                    if Suffix.Left then
+                        suffer = Suffix.Text().. suffer
+                    else
+                        suffer = suffer.. Suffix.Text()
+                    end
+                else
+                    if Suffix.Left then
+                        suffer = Suffix.Text.. suffer
+                    elseif not Suffix.Left then
+                        suffer = suffer.. Suffix.Text
+                    end
+                end
+				TextBox_1.Text = suffer
+				task.spawn(Callback, value)
 			end
 
 			updateSlider(Value or 0)
