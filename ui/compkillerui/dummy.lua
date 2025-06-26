@@ -3034,13 +3034,13 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 		Compkiller:_Hover(Frame,function()
 			if Signal:GetValue() then
 				Compkiller:_Animation(Frame,TweenInfo.new(0.2),{
-					BackgroundTransparency = 0.6
+					BackgroundTransparency = 0.600
 				})
 			end;
 		end,function()
 			if Signal:GetValue() then
 				Compkiller:_Animation(Frame,TweenInfo.new(0.2),{
-					BackgroundTransparency = 0.1
+					BackgroundTransparency = 0.600
 				})
 			end;
 		end);
@@ -3054,11 +3054,11 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 		Args.Signal = Signal:Connect(function(bool)
 			if bool then
 				Compkiller:_Animation(BlockLine, TweenInfo.new(0.35),{
-					BackgroundTransparency = 0.6
+					BackgroundTransparency = 0.500
 				});
 
 				Compkiller:_Animation(Frame, TweenInfo.new(0.35),{
-					BackgroundTransparency = 0.1
+					BackgroundTransparency = 0.600
 				});
 
 				Compkiller:_Animation(UIStroke, TweenInfo.new(0.35),{
@@ -8006,5 +8006,7 @@ function Compkiller.newNotify()
 		end,
 	};
 end;
+
+warn('loaded v4');
 
 return Compkiller;
