@@ -3034,7 +3034,7 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 		Compkiller:_Hover(Frame,function()
 			if Signal:GetValue() then
 				Compkiller:_Animation(Frame,TweenInfo.new(0.2),{
-					BackgroundTransparency = 0
+					BackgroundTransparency = 0.6
 				})
 			end;
 		end,function()
@@ -3054,7 +3054,7 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 		Args.Signal = Signal:Connect(function(bool)
 			if bool then
 				Compkiller:_Animation(BlockLine, TweenInfo.new(0.35),{
-					BackgroundTransparency = 0.500
+					BackgroundTransparency = 0.6
 				});
 
 				Compkiller:_Animation(Frame, TweenInfo.new(0.35),{
@@ -8006,7 +8006,5 @@ function Compkiller.newNotify()
 		end,
 	};
 end;
-
-warn('loaded v3');
 
 return Compkiller;
