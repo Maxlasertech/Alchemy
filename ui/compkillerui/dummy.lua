@@ -4013,7 +4013,7 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 
 			ValueText.Text = DaTabarser(Config.Default);
 
-			Config.Callback(Value);
+			Config.Callback(value);
 		end);
 
 		repi.EventOut:Connect(function(v)
@@ -7990,6 +7990,6 @@ function Compkiller.newNotify()
 	};
 end;
 
-warn('loaded ver 1')
+warn('loaded v2')
 
 return Compkiller;
