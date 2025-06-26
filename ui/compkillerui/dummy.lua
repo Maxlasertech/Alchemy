@@ -4037,12 +4037,15 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 
 		function Args:SetValue(Value)
 			if Config.Multi then
+			  Value = Value or {}
 				local Dumped = {}
 
-				for i,v in (Value or {}) do
-					if typeof(i) == 'string' and v then
-						table.insert(Dumped, i)
-					elseif typeof(i) == 'number' then
+				for i,v in Value do
+					if typeof(i) == 'string' then
+						if v then
+						  table.insert(Dumped, i)
+						end
+					else
 						table.insert(Dumped, v)
 					end
 				end
@@ -7986,5 +7989,7 @@ function Compkiller.newNotify()
 		end,
 	};
 end;
+
+warn('loaded ver 1')
 
 return Compkiller;
