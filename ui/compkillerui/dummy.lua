@@ -2500,7 +2500,7 @@ function Compkiller:_LoadDropdown(BaseParent: TextButton , Callback: () -> any)
 		DropdownItem.BorderColor3 = Color3.fromRGB(0, 0, 0)
 		DropdownItem.BorderSizePixel = 0
 		DropdownItem.Size = UDim2.new(1, -1, 0, 20)
-		DropdownItem.ZIndex = 106
+		DropdownItem.ZIndex = 207
 
 		BlockText.Name = "BlockText"
 		BlockText.Parent = DropdownItem
@@ -2510,7 +2510,7 @@ function Compkiller:_LoadDropdown(BaseParent: TextButton , Callback: () -> any)
 		BlockText.BorderSizePixel = 0
 		BlockText.Position = UDim2.new(0, 5, 0.5, 0)
 		BlockText.Size = UDim2.new(1, -10, 0, 25)
-		BlockText.ZIndex = 106
+		BlockText.ZIndex = 208
 		BlockText.Font = Enum.Font.GothamMedium
 		BlockText.Text = ""
 		BlockText.TextColor3 = Compkiller.Colors.SwitchColor
@@ -4013,7 +4013,21 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 
 			ValueText.Text = DaTabarser(Config.Default);
 
-			Config.Callback(Config.Default);
+			local Value = Config.Default
+
+			if Config.Multi then
+				local Dumped = {}
+
+				for i,v in (Config.Default or {}) do
+					if v then
+						table.insert(Dumped, i)
+					end
+				end
+
+				Value = Dumped
+			end
+
+			Config.Callback(Value);
 		end);
 
 		repi.EventOut:Connect(function(v)
@@ -4036,12 +4050,6 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 		Args.Flag = Config.Flag;
 
 		function Args:SetValue(Value)
-			Config.Default = Value;
-
-			ValueText.Text = DaTabarser(Config.Default);
-
-			repi:SetData(Config.Default,Config.Values,Config.Multi,true);
-
 			if Config.Multi then
 				local Dumped = {}
 
@@ -4053,6 +4061,12 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 
 				Value = Dumped
 			end
+			
+			Config.Default = Value;
+
+			ValueText.Text = DaTabarser(Config.Default);
+
+			repi:SetData(Config.Default,Config.Values,Config.Multi,true);
 
 			Config.Callback(Value);
 		end;
