@@ -4006,6 +4006,23 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 		local Button = Compkiller:_Input(ValueItems);
 
 		repi = Compkiller:_LoadDropdown(Button,function(value)
+		  if Config.Multi then
+			  local Value = value or {}
+				local Dumped = {}
+
+				for i,v in Value do
+					if typeof(i) == 'string' then
+						if v then
+						  table.insert(Dumped, i)
+						end
+					else
+						table.insert(Dumped, v)
+					end
+				end
+
+				value = Dumped
+			end
+		
 			Config.Default = value;
 
 			repi:SetData(Config.Default,Config.Values,Config.Multi,false);
@@ -7990,6 +8007,6 @@ function Compkiller.newNotify()
 	};
 end;
 
-warn('loaded v2')
+warn('loaded v3');
 
 return Compkiller;
