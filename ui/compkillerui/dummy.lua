@@ -4040,8 +4040,10 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 				local Dumped = {}
 
 				for i,v in (Value or {}) do
-					if v then
+					if typeof(i) == 'string' and v then
 						table.insert(Dumped, i)
+					elseif typeof(i) == 'number' then
+						table.insert(Dumped, v)
 					end
 				end
 
