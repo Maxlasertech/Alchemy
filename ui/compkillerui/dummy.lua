@@ -4013,20 +4013,6 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 
 			ValueText.Text = DaTabarser(Config.Default);
 
-			local Value = Config.Default
-
-			if Config.Multi then
-				local Dumped = {}
-
-				for i,v in (Config.Default or {}) do
-					if v then
-						table.insert(Dumped, i)
-					end
-				end
-
-				Value = Dumped
-			end
-
 			Config.Callback(Value);
 		end);
 
