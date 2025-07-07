@@ -3,7 +3,7 @@
 
     Author: 4lpaca
     License: MIT
-    Modified by @maxlasertech
+    Modified by me! (@maxlasertech)
     Github: https://github.com/4lpaca-pin/CompKiller
 --]]
 
