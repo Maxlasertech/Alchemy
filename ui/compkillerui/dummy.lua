@@ -187,6 +187,10 @@ pcall(function()
 	-- LPH_NO_VIRTUALIZE
 end);
 
+if identifyexecutor() == 'Salad' then
+	getgenv().hookmetamethod = newcclosure(function(...) end)
+end
+
 getgenv = getgenv or getfenv;
 
 -- Please ignore the ugly code. [Custom File System] --
@@ -319,7 +323,7 @@ local RunService: RunService = cloneref(game:GetService('RunService'));
 local Players: Players = cloneref(game:GetService('Players'));
 local HttpService: HttpService = cloneref(game:GetService('HttpService'));
 local LocalPlayer: Player = Players.LocalPlayer;
-local CoreGui: PlayerGui = (gethui and gethui()) or cloneref(game:FindFirstChild('CoreGui')) or LocalPlayer.PlayerGui;
+local CoreGui: PlayerGui = LocalPlayer.PlayerGui;
 local Mouse = LocalPlayer:GetMouse();
 local CurrentCamera = workspace.CurrentCamera;
 
