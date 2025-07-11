@@ -194,7 +194,7 @@ end
 getgenv = getgenv or getfenv;
 
 -- Please ignore the ugly code. [Custom File System] --
-if game:GetService('RunService'):IsStudio() then
+if cloneref(game:GetService('RunService')):IsStudio() then
 	local BaseWorkspace = Instance.new('Folder',game:GetService("ReplicatedFirst"));
 
 	BaseWorkspace.Name = tostring(string.char(math.random(50,120)))..tostring(string.char(math.random(50,120)))..tostring(string.char(math.random(50,120)))..tostring(string.char(math.random(50,120)))..tostring(string.char(math.random(50,120)))..tostring(string.char(math.random(50,120)));
@@ -328,7 +328,7 @@ local Mouse = LocalPlayer:GetMouse();
 local CurrentCamera = workspace.CurrentCamera;
 
 local Compkiller = {
-	Version = '1.3',
+	Version = '1.4',
 	Logo = "rbxassetid://120245531583106",
 	Windows = {},
 	Scale = {
@@ -1379,6 +1379,8 @@ end;
 function Compkiller:_AddColorPickerPanel(Button: ImageButton , Callback: (Color: Color3) -> any?)
 	local Window = Compkiller:_GetWindowFromElement(Button);
 
+	local BaseZ_Index = math.random(1,15) * 100;
+
 	local ColorPickerWindow = Instance.new("Frame")
 	local UIStroke = Instance.new("UIStroke")
 	local UICorner = Instance.new("UICorner")
@@ -1417,7 +1419,7 @@ function Compkiller:_AddColorPickerPanel(Button: ImageButton , Callback: (Color:
 	ColorPickerWindow.BorderSizePixel = 0
 	ColorPickerWindow.Position = UDim2.new(123, 0, 123, 0)
 	ColorPickerWindow.Size = UDim2.new(0, 175, 0, 200)
-	ColorPickerWindow.ZIndex = 100
+	ColorPickerWindow.ZIndex = BaseZ_Index
 	ColorPickerWindow.AnchorPoint = Vector2.new(0.5,0)
 	ColorPickerWindow.Active = true;
 	
@@ -1444,7 +1446,7 @@ function Compkiller:_AddColorPickerPanel(Button: ImageButton , Callback: (Color:
 	ColorPickBox.BorderSizePixel = 0
 	ColorPickBox.Position = UDim2.new(0, 7, 0, 7)
 	ColorPickBox.Size = UDim2.new(0, 145, 0, 145)
-	ColorPickBox.ZIndex = 101
+	ColorPickBox.ZIndex = BaseZ_Index + 1
 	ColorPickBox.Image = "http://www.roblox.com/asset/?id=112554223509763"
 
 	MouseMovement.Name = "MouseMovement"
@@ -1455,7 +1457,7 @@ function Compkiller:_AddColorPickerPanel(Button: ImageButton , Callback: (Color:
 	MouseMovement.BorderSizePixel = 0
 	MouseMovement.Position = UDim2.new(0.822222233, 0, 0.0592592582, 0)
 	MouseMovement.Size = UDim2.new(0, 12, 0, 12)
-	MouseMovement.ZIndex = 105
+	MouseMovement.ZIndex = BaseZ_Index + 5
 	MouseMovement.AnchorPoint = Vector2.new(0.5,0.5)
 	MouseMovement.Image = "rbxassetid://4805639000"
 
@@ -1474,7 +1476,7 @@ function Compkiller:_AddColorPickerPanel(Button: ImageButton , Callback: (Color:
 	ColorRedGreenBlue.ClipsDescendants = true
 	ColorRedGreenBlue.Position = UDim2.new(1, -7, 0, 7)
 	ColorRedGreenBlue.Size = UDim2.new(0, 10, 0, 145)
-	ColorRedGreenBlue.ZIndex = 106
+	ColorRedGreenBlue.ZIndex = BaseZ_Index + 6
 
 	UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 0)), ColorSequenceKeypoint.new(0.10, Color3.fromRGB(255, 153, 0)), ColorSequenceKeypoint.new(0.20, Color3.fromRGB(203, 255, 0)), ColorSequenceKeypoint.new(0.30, Color3.fromRGB(50, 255, 0)), ColorSequenceKeypoint.new(0.40, Color3.fromRGB(0, 255, 102)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(0, 255, 255)), ColorSequenceKeypoint.new(0.60, Color3.fromRGB(0, 101, 255)), ColorSequenceKeypoint.new(0.70, Color3.fromRGB(50, 0, 255)), ColorSequenceKeypoint.new(0.80, Color3.fromRGB(204, 0, 255)), ColorSequenceKeypoint.new(0.90, Color3.fromRGB(255, 0, 153)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 0, 0))}
 	UIGradient.Rotation = 90
@@ -1492,7 +1494,7 @@ function Compkiller:_AddColorPickerPanel(Button: ImageButton , Callback: (Color:
 	ColorRGBSlide.BorderSizePixel = 0
 	ColorRGBSlide.Position = UDim2.new(0.5, 0, 0.5, 0)
 	ColorRGBSlide.Size = UDim2.new(1, 0, 0, 2)
-	ColorRGBSlide.ZIndex = 107
+	ColorRGBSlide.ZIndex = BaseZ_Index + 7
 
 	Left.Name = "Left"
 	Left.Parent = ColorRGBSlide
@@ -1500,7 +1502,7 @@ function Compkiller:_AddColorPickerPanel(Button: ImageButton , Callback: (Color:
 	Left.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Left.BorderSizePixel = 0
 	Left.Size = UDim2.new(0, 2, 1, 0)
-	Left.ZIndex = 1005
+	Left.ZIndex = BaseZ_Index + 100
 
 	UIStroke_3.Parent = Left
 
@@ -1512,7 +1514,7 @@ function Compkiller:_AddColorPickerPanel(Button: ImageButton , Callback: (Color:
 	Right.BorderSizePixel = 0
 	Right.Position = UDim2.new(1, 0, 0, 0)
 	Right.Size = UDim2.new(0, 2, 1, 0)
-	Right.ZIndex = 1005
+	Right.ZIndex = BaseZ_Index + 100
 
 	UIStroke_4.Parent = Right
 
@@ -1523,7 +1525,7 @@ function Compkiller:_AddColorPickerPanel(Button: ImageButton , Callback: (Color:
 	ColorOpc.BorderSizePixel = 0
 	ColorOpc.Position = UDim2.new(0, 7, 0, 160)
 	ColorOpc.Size = UDim2.new(1, -30, 0, 9)
-	ColorOpc.ZIndex = 106
+	ColorOpc.ZIndex = BaseZ_Index + 6
 
 	UICorner_4.CornerRadius = UDim.new(1, 0)
 	UICorner_4.Parent = ColorOpc
@@ -1537,7 +1539,7 @@ function Compkiller:_AddColorPickerPanel(Button: ImageButton , Callback: (Color:
 	ColorOptSlide.BorderSizePixel = 0
 	ColorOptSlide.Position = UDim2.new(0.5, 0, 0.5, 0)
 	ColorOptSlide.Size = UDim2.new(0, 2, 1, 0)
-	ColorOptSlide.ZIndex = 107
+	ColorOptSlide.ZIndex = BaseZ_Index + 7
 
 	Left_2.Name = "Left"
 	Left_2.Parent = ColorOptSlide
@@ -1545,7 +1547,7 @@ function Compkiller:_AddColorPickerPanel(Button: ImageButton , Callback: (Color:
 	Left_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Left_2.BorderSizePixel = 0
 	Left_2.Size = UDim2.new(1, 0, 0, 2)
-	Left_2.ZIndex = 1005
+	Left_2.ZIndex = BaseZ_Index + 100
 
 	UIStroke_5.Parent = Left_2
 
@@ -1557,7 +1559,7 @@ function Compkiller:_AddColorPickerPanel(Button: ImageButton , Callback: (Color:
 	Right_2.BorderSizePixel = 0
 	Right_2.Position = UDim2.new(0, 0, 1, 0)
 	Right_2.Size = UDim2.new(1, 0, 0, 2)
-	Right_2.ZIndex = 1005
+	Right_2.ZIndex = BaseZ_Index + 100
 
 	UIStroke_6.Parent = Right_2
 
@@ -1574,7 +1576,7 @@ function Compkiller:_AddColorPickerPanel(Button: ImageButton , Callback: (Color:
 	TransparentImage.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	TransparentImage.BorderSizePixel = 0
 	TransparentImage.Size = UDim2.new(1, 0, 1, 0)
-	TransparentImage.ZIndex = 105
+	TransparentImage.ZIndex = BaseZ_Index + 5
 	TransparentImage.Image = "rbxassetid://6198493000"
 	TransparentImage.ImageColor3 = Color3.fromRGB(206, 206, 206)
 	TransparentImage.ScaleType = Enum.ScaleType.Crop
@@ -1590,7 +1592,7 @@ function Compkiller:_AddColorPickerPanel(Button: ImageButton , Callback: (Color:
 	HexFrame.BorderSizePixel = 0
 	HexFrame.Position = UDim2.new(0.5, 0, 1, -5)
 	HexFrame.Size = UDim2.new(1, -16, 0, 20)
-	HexFrame.ZIndex = 205
+	HexFrame.ZIndex = BaseZ_Index + 205
 	
 	table.insert(Compkiller.Elements.BlockColor,{
 		Element = HexFrame,
@@ -1615,7 +1617,7 @@ function Compkiller:_AddColorPickerPanel(Button: ImageButton , Callback: (Color:
 	TextLabel.BorderSizePixel = 0
 	TextLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
 	TextLabel.Size = UDim2.new(1, -10, 1, -5)
-	TextLabel.ZIndex = 206
+	TextLabel.ZIndex = BaseZ_Index + 206
 	TextLabel.Font = Enum.Font.Gotham
 	TextLabel.Text = "#FFFFFFF"
 	TextLabel.TextColor3 = Compkiller.Colors.SwitchColor
@@ -2245,6 +2247,8 @@ function Compkiller:_LoadOption(Value , TabSignal)
 		local Element: ImageButton = Value:AddLink("Option");
 		Element.Visible = false
 
+		local BaseZ_Index = math.random(1,15) * 100;
+
 		local Signal = Compkiller.__SIGNAL(false);
 
 		local ExtractElement = Instance.new("Frame")
@@ -2321,7 +2325,7 @@ function Compkiller:_LoadOption(Value , TabSignal)
 		ExtractElement.ClipsDescendants = true
 		ExtractElement.Position = UDim2.new(123, 0, 123, 0)
 		ExtractElement.Size = UDim2.new(0, 225, 0, 35)
-		ExtractElement.ZIndex = 100
+		ExtractElement.ZIndex = BaseZ_Index
 		ExtractElement.Visible = false
 		ExtractElement.ClipsDescendants = true
 		
@@ -2349,7 +2353,7 @@ function Compkiller:_LoadOption(Value , TabSignal)
 		Elements.BorderSizePixel = 0
 		Elements.Position = UDim2.new(0.5, 0, 0.5, 0)
 		Elements.Size = UDim2.new(1, -5, 1,-1)
-		Elements.ZIndex = 120
+		Elements.ZIndex = BaseZ_Index + 20
 
 		UIListLayout.Parent = Elements
 		UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
@@ -2379,6 +2383,8 @@ end;
 function Compkiller:_LoadDropdown(BaseParent: TextButton , Callback: () -> any)
 	local Window = Compkiller:_GetWindowFromElement(BaseParent);
 
+	local BaseZ_Index = BaseParent.ZIndex + (math.random(1,15) * 100);
+
 	local DropdownWindow = Instance.new("Frame")
 	local UIStroke = Instance.new("UIStroke")
 	local UICorner = Instance.new("UICorner")
@@ -2394,7 +2400,7 @@ function Compkiller:_LoadDropdown(BaseParent: TextButton , Callback: () -> any)
 	DropdownWindow.BorderSizePixel = 0
 	DropdownWindow.Position = UDim2.new(123, 0, 123, 0)
 	DropdownWindow.Size = UDim2.new(0, 190, 0, 200)
-	DropdownWindow.ZIndex = 100
+	DropdownWindow.ZIndex = BaseZ_Index
 	
 	table.insert(Compkiller.Elements.BlockBackground,{
 		Element = DropdownWindow,
@@ -2425,7 +2431,7 @@ function Compkiller:_LoadDropdown(BaseParent: TextButton , Callback: () -> any)
 	ScrollingFrame.BorderSizePixel = 0
 	ScrollingFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 	ScrollingFrame.Size = UDim2.new(1, -5, 1, -5)
-	ScrollingFrame.ZIndex = 105
+	ScrollingFrame.ZIndex = BaseZ_Index + 5
 	ScrollingFrame.BottomImage = ""
 	ScrollingFrame.ScrollBarThickness = 0
 	ScrollingFrame.TopImage = ""
@@ -2504,7 +2510,7 @@ function Compkiller:_LoadDropdown(BaseParent: TextButton , Callback: () -> any)
 		DropdownItem.BorderColor3 = Color3.fromRGB(0, 0, 0)
 		DropdownItem.BorderSizePixel = 0
 		DropdownItem.Size = UDim2.new(1, -1, 0, 20)
-		DropdownItem.ZIndex = 207
+		DropdownItem.ZIndex = BaseZ_Index + 6
 
 		BlockText.Name = "BlockText"
 		BlockText.Parent = DropdownItem
@@ -2514,7 +2520,7 @@ function Compkiller:_LoadDropdown(BaseParent: TextButton , Callback: () -> any)
 		BlockText.BorderSizePixel = 0
 		BlockText.Position = UDim2.new(0, 5, 0.5, 0)
 		BlockText.Size = UDim2.new(1, -10, 0, 25)
-		BlockText.ZIndex = 208
+		BlockText.ZIndex = BaseZ_Index + 6 
 		BlockText.Font = Enum.Font.GothamMedium
 		BlockText.Text = ""
 		BlockText.TextColor3 = Compkiller.Colors.SwitchColor
@@ -2536,7 +2542,7 @@ function Compkiller:_LoadDropdown(BaseParent: TextButton , Callback: () -> any)
 		BlockLine.BorderSizePixel = 0
 		BlockLine.Position = UDim2.new(0.5, 0, 1, 0)
 		BlockLine.Size = UDim2.new(1, -6, 0, 1)
-		BlockLine.ZIndex = 107
+		BlockLine.ZIndex = BaseZ_Index + 7
 		
 		table.insert(Compkiller.Elements.LineColor,{
 			Element = BlockLine,
@@ -8020,7 +8026,5 @@ function Compkiller.newNotify()
 		end,
 	};
 end;
-
-warn('loaded v5');
 
 return Compkiller;
