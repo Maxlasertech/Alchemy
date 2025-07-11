@@ -406,7 +406,7 @@ function Compkiller:_GetIcon(name : string) : string
 end;
 
 function Compkiller:_RandomString() : string
-	return string.char(math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102));	
+	return 'CK='..string.char(math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102));	
 end;
 
 function Compkiller:_ConvertArgs(Config: table)
@@ -7138,7 +7138,64 @@ function Compkiller.new(Config : Window)
 
 			WindowArgs.THREADS[Section] = refresh;
 			
-			UIListLayout:GetPropertyChangedSignal('AbsoluteContentSize'):Connect(refresh);
+			local refreshScale = function()
+				local Childrens = Parent:GetChildren();
+				local Latest = 0;
+				local frameFound = 0;
+
+				for i,v in next , Childrens do task.wait();
+					if v:IsA('Frame') then
+						if v ~= Section then
+							frameFound += 1;
+
+							if v.LayoutOrder < Section.LayoutOrder then
+								if WindowArgs.THREADS[v] then
+									v:SetAttribute('Height',nil);
+									WindowArgs.THREADS[v]();
+								end;
+								
+								Latest += 1;
+							end;
+						end;
+					end;
+				end;
+
+				if frameFound == 0 then
+					Latest = math.huge;
+				end;
+
+				if Latest >= frameFound then
+					if UIListLayout.AbsoluteContentSize.Y > Parent.AbsoluteSize.Y then
+						Section:SetAttribute('Height',nil);
+					else
+						local parentScale = 0;
+
+						for i,v in next , Parent:GetChildren() do
+							if v:IsA('Frame') then
+								parentScale += v:GetAttribute('HEIGHTSCALE') + ParentLayout.Padding.Offset;
+							end
+						end;
+
+						local remainingHeight = UIListLayout.AbsoluteContentSize.Y + (Parent.AbsoluteSize.Y - (parentScale));
+
+						Section:SetAttribute('Height',remainingHeight);
+					end;
+					
+					refresh();
+				else
+					Section:SetAttribute('Height',nil);
+				end;
+			end;
+			
+			Section.ChildAdded:Connect(refreshScale)
+
+			Section:SetAttribute('HEIGHTSCALE',UIListLayout.AbsoluteContentSize.Y);
+			
+			UIListLayout:GetPropertyChangedSignal('AbsoluteContentSize'):Connect(function()
+				Section:SetAttribute('HEIGHTSCALE',UIListLayout.AbsoluteContentSize.Y);
+				
+				refresh()
+			end);
 
 			TabOpenSignal:Connect(function(bool)
 				if bool then
