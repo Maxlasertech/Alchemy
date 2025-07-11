@@ -7134,7 +7134,7 @@ function Compkiller.new(Config : Window)
 						Size = UDim2.new(1, 0, 0, 35)
 					});
 				end;
-			end);
+			end;
 
 			WindowArgs.THREADS[Section] = refresh;
 			
