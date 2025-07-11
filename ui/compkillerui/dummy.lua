@@ -7135,7 +7135,7 @@ function Compkiller.new(Config : Window)
 					});
 				end;
 			end;
-
+			
 			WindowArgs.THREADS[Section] = refresh;
 			
 			local refreshScale = function()
