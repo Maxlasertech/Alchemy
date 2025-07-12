@@ -7226,7 +7226,7 @@ function Compkiller.new(Config : Window)
 			end);
 
 			Compkiller:_Input(Header,function()
-				IsOpen = not IsOpen;
+				--[[IsOpen = not IsOpen;
 				
 				if IsOpen then
 					Compkiller:_Animation(SectionClose,TweenInfo.new(0.35),{
@@ -7236,7 +7236,7 @@ function Compkiller.new(Config : Window)
 					Compkiller:_Animation(SectionClose,TweenInfo.new(0.35),{
 						Rotation = -180
 					});
-				end;
+				end;]]
 				
 				refresh();
 			end);
