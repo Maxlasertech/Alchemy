@@ -2057,7 +2057,7 @@ function Compkiller:_LoadOption(Value , TabSignal)
 
         UserInputService.InputBegan:Connect(function(input, gameProcessed: boolean)
             if gameProcessed then return end
-            if input.KeyCode == Enum.KeyCode[Config.Default] and Config.Callback then
+            if typeof(Config.Default) == 'string' and input.KeyCode == Enum.KeyCode[Config.Default] and Config.Callback then
                 pcall(Config.Callback)
             end
         end) --> i might be dumb but it doesnt have input functionality lol
@@ -2883,7 +2883,7 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 
         UserInputService.InputBegan:Connect(function(input, gameProcessed: boolean)
             if gameProcessed then return end
-            if input.KeyCode == Enum.KeyCode[Config.Default] and Config.Callback then
+            if typeof(Config.Default) == 'string' and input.KeyCode == Enum.KeyCode[Config.Default] and Config.Callback then
                 pcall(Config.Callback)
             end
         end) --> i might be dumb but it doesnt have input functionality lol
@@ -2891,7 +2891,7 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 		Args.Link = Compkiller:_LoadOption(Block);
 
 		function Args:GetValue()
-			return (typeof(Config.Default) == "string" and Config.Default) or Config.Default.Name;
+			return (typeof(Config.Default) == "string" and Config.Default) or Config.Name;
 		end;
 
 		if Config.Flag then
