@@ -1992,7 +1992,7 @@ function Compkiller:_LoadOption(Value , TabSignal)
 	local Window = Compkiller:_GetWindowFromElement(Value.Root);
 	local Tween = TweenInfo.new(0.3,Enum.EasingStyle.Quint);
 
-	function Args:AddKeybind(Config: MiniKeybind)
+	function Args:AddKeybind(Config: MiniKeybind)		
 		Config = Compkiller.__CONFIG(Config,{
 			Name = "Keybind",
 			Default = nil,
@@ -2054,6 +2054,13 @@ function Compkiller:_LoadOption(Value , TabSignal)
 
 			Config.Callback(Config.Default);
 		end;
+
+        UserInputService.InputBegan:Connect(function(input, gameProcessed: boolean)
+            if gameProcessed then return end
+            if input.KeyCode == Enum.KeyCode[Config.Default] and Config.Callback then
+                pcall(Config.Callback)
+            end
+        end) --> i might be dumb but it doesnt have input functionality lol
 
 		function Args:GetValue()
 			return (typeof(Config.Default) == "string" and Config.Default) or Config.Default.Name;
@@ -2865,12 +2872,21 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 
 			Keybind.SetValue(Config.Default);
 
-			Config.Callback(Config.Default);
+            if typeof(Config.Changed) == 'function' then
+			    Config.Changed(Config.Default);
+            end
 		end;
 
 		Args.Signal = Signal:Connect(function(bool)
 			Block:SetVisible(bool);
 		end);
+
+        UserInputService.InputBegan:Connect(function(input, gameProcessed: boolean)
+            if gameProcessed then return end
+            if input.KeyCode == Enum.KeyCode[Config.Default] and Config.Callback then
+                pcall(Config.Callback)
+            end
+        end) --> i might be dumb but it doesnt have input functionality lol
 
 		Args.Link = Compkiller:_LoadOption(Block);
 
