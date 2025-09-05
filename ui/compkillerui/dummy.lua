@@ -3,7 +3,7 @@
 
     Author: 4lpaca
     License: MIT
-    Modified by me! (@maxlasertech)
+    Modified by @maxlasertech for dummy & vape api compatibility
     Github: https://github.com/4lpaca-pin/CompKiller
 --]]
 
@@ -417,6 +417,9 @@ function Compkiller:_ConvertArgs(Config: table)
 	if not b.Name then
 		b.Name = b.Title
 	end
+	if not b.Callback then
+		b.Callback = b.Function
+	end
 	if not b.Min and typeof(b.Value) == 'table' then
 		for i,v in b.Value do
 			local i = i
@@ -431,6 +434,9 @@ function Compkiller:_ConvertArgs(Config: table)
 	end
 	if not b.Type and typeof(b.Suffix) == 'table' then
 		b.Type = typeof(b.Suffix.Text) == 'function' and b.Suffix.Text() or b.Suffix.Text
+	end
+	if not b.Content then
+		b.Content = b.Tooltip
 	end
 	if not b.Flag then
 		local ExistedFlags: table = {}
