@@ -420,6 +420,9 @@ function Compkiller:_ConvertArgs(Config: table)
 	if not b.Callback then
 		b.Callback = b.Function
 	end
+    if not b.Values then
+        b.Values = b.List
+    end
 	if not b.Min and typeof(b.Value) == 'table' then
 		for i,v in b.Value do
 			local i = i
@@ -430,8 +433,11 @@ function Compkiller:_ConvertArgs(Config: table)
 		end
 	end
 	if not b.Rounding then
-		b.Round = b.Rounding
+		b.Rounding = b.Round
 	end
+    if not b.Rounding then
+        b.Rounding = b.Decimal
+    end
 	if not b.Type and typeof(b.Suffix) == 'table' then
 		b.Type = typeof(b.Suffix.Text) == 'function' and b.Suffix.Text() or b.Suffix.Text
 	end
@@ -2214,6 +2220,8 @@ function Compkiller:_LoadOption(Value , TabSignal)
 		return Args;
 	end;
 
+    Args.CreatColorPicker = Args.AddColorPicker
+
 	function Args:AddToggle(Config : MiniToggle)
 		Config = Compkiller:_ConvertArgs(Config)
 
@@ -2255,6 +2263,8 @@ function Compkiller:_LoadOption(Value , TabSignal)
 
 		return Args;
 	end;
+
+    Args.CreateToggle = Args.AddToggle
 
 	function Args:AddOption()
 		local Element: ImageButton = Value:AddLink("Option");
@@ -2808,6 +2818,8 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 		return Args;
 	end;
 
+    Args.CreateToggle = Args.AddToggle
+
 	function Args:AddKeybind(Config : Keybind)
 		Config = Compkiller.__CONFIG(Config,{
 			Name = "Keybind",
@@ -2979,6 +2991,8 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 		return Args;
 	end;
 
+    Args.CreatColorPicker = Args.AddColorPicker
+
 	function Args:AddButton(Config: Button)
 		Config = Compkiller:_ConvertArgs(Config)
 
@@ -3129,6 +3143,8 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 
 		return Args;
 	end;
+
+    Args.CreateButton = args.AddButton
 
 	function Args:AddSlider(Config: Slider)
 		Config = Compkiller:_ConvertArgs(Config)
@@ -3480,6 +3496,8 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 		return Args;
 	end;
 
+    Args.CreateSlider = Args.AddSlider
+
 	function Args:AddParagraph(Config: Paragraph) -- request by Neptune
 		Config = Compkiller:_ConvertArgs(Config)
 
@@ -3626,6 +3644,8 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 
 		return Args;
 	end;
+
+    Args.CreateParagraph = Args.AddParagraph
 	
 	function Args:AddTextBox(Config: TextBoxConfig)
 		Config = Compkiller.__CONFIG(Config , {
@@ -3847,6 +3867,8 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 
 		return Args;
 	end;
+
+    Args.CreateTextBox = Args.AddTextBox
 
 	function Args:AddDropdown(Config : Dropdown)
 		Config = Compkiller:_ConvertArgs(Config)
@@ -4189,6 +4211,8 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 
 		return Args;
 	end;
+
+    Args.CreateDropdown = Args.AddDropdown
 
 	return Args;
 end;
