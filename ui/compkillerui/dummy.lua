@@ -3147,7 +3147,7 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 		return Args;
 	end;
 
-    Args.CreateButton = args.AddButton
+    Args.CreateButton = Args.AddButton
 
 	function Args:AddSlider(Config: Slider)
 		Config = Compkiller:_ConvertArgs(Config)
