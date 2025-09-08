@@ -414,6 +414,9 @@ function Compkiller:_ConvertArgs(Config: table)
 	if not b.Default then
 		b.Default = b.Value
 	end
+	if not b.Value then
+		b.Value = b.Default
+	end
 	if not b.Name then
 		b.Name = b.Title
 	end
