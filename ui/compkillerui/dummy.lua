@@ -6955,7 +6955,7 @@ function Compkiller.new(Config : Window)
 
 			config = Compkiller.__CONFIG(config,{
 				Name = "Section",
-				Position = "left"
+				Position = config.Position
 			});
 
 			local Section = Instance.new("Frame")
