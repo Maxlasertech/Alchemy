@@ -3224,6 +3224,13 @@ function Compkiller:_LoadOption(Value , TabSignal)
 			Config.Callback(KeyName);
 		end);
 
+		UserInputService.InputBegan:Connect(function(input, gameProcessed: boolean)
+            if gameProcessed then return end
+            if typeof(Config.Default) == 'string' and input.KeyCode == Enum.KeyCode[Config.Default] and Config.Callback then
+                pcall(Config.Callback)
+            end
+        end)
+
 		local Args = {};
 
 		Args.Flag = Config.Flag;
@@ -4040,6 +4047,13 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 
 			Config.Callback(KeyName);
 		end);
+
+		UserInputService.InputBegan:Connect(function(input, gameProcessed: boolean)
+            if gameProcessed then return end
+            if typeof(Config.Default) == 'string' and input.KeyCode == Enum.KeyCode[Config.Default] and Config.Callback then
+                pcall(Config.Callback)
+            end
+        end)
 
 		local Args = {};
 
