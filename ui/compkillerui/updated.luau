@@ -9522,7 +9522,7 @@ function Compkiller.newNotify()
 	local UIListLayout = Instance.new("UIListLayout")
 
 	Notification.Name = Compkiller:_RandomString()
-	Notification.Parent = CoreGui;
+	Notification.Parent = cloneref(LocalPlayer.PlayerGui);
 	Notification.ResetOnSpawn = false
 	Notification.ZIndexBehavior = Enum.ZIndexBehavior.Global
 
