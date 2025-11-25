@@ -7845,13 +7845,13 @@ function Compkiller.new(Config : Window)
 					end));
 
 					Button.OnLoad = function()
+                        Configuration.Config:LoadConfig(v.Name);
+                        
 						WindowArgs.Notify.new({
 							Title = "Configs",
 							Icon = Compkiller:CacheImage(Config.Logo),
 							Content = "Load config \""..v.Name.."\""
 						})
-
-						Configuration.Config:LoadConfig(v.Name);
 					end;
 
 					Button.OnSave = function()
@@ -9366,6 +9366,8 @@ function Compkiller:ConfigManager(ConfigManager: ConfigManager) : ConfigFunction
 	function Args:LoadConfig(ConfigName: string)
 		local _path = Compkiller:_Path(Args.Directory,ConfigName);
 
+        print(_path, isfile(_path))
+
 		if isfile(_path) then
 			local info = readfile(_path);
 
@@ -9382,6 +9384,7 @@ function Compkiller:ConfigManager(ConfigManager: ConfigManager) : ConfigFunction
 			end
 
 			for i,v in next , decoded do
+				warn(i, v and v.Flag)
 				if v and v.Flag then
 
 					local Value = Flags[v.Flag];
@@ -9389,15 +9392,18 @@ function Compkiller:ConfigManager(ConfigManager: ConfigManager) : ConfigFunction
 					if Value then
 
 						if v.Value.Type == "NormalElement" then
-							Value.Functions:SetValue(v.Value.Value);
-
+							task.spawn(function()
+								Value.Functions:SetValue(v.Value.Value);
+							end)
 						elseif v.Value.Type == "ColorPicker" then
 
 							local Color = Color3.new(v.Value.Color3.R,v.Value.Color3.G,v.Value.Color3.B);
 
 							local Transparency = v.Value.Transparency;
 
-							Value.Functions:SetValue(Color , Transparency);
+							task.spawn(function()
+								Value.Functions:SetValue(Color , Transparency);
+							end)
 						end;
 					end;
 				end
