@@ -4078,7 +4078,7 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 		Args.Link = Compkiller:_LoadOption(Block);
 
 		function Args:GetValue()
-			return (typeof(Config.Default) == "string" and Config.Default) or Config.Default.Name;
+			return (typeof(Config.Default) == "string" and Config.Default) or Config.Name;
 		end;
 
 		if Config.Flag then
@@ -7420,8 +7420,8 @@ function Compkiller.new(Config : Window)
 			DelButton.BorderSizePixel = 0
 			DelButton.LayoutOrder = -9999
 			DelButton.Size = UDim2.new(0, 35, 0, 15)
-			DelButton.ZIndex = 14
-			DelButton.Image = Compkiller:CacheImage("rbxassetid://10747362393")
+			DelButton.ZIndex = 18
+			DelButton.Image = 'rbxassetid://10747362241'
 			DelButton.ImageColor3 = Color3.fromRGB(255, 107, 107)
 			DelButton.ImageTransparency = 0.500
 			DelButton.ScaleType = Enum.ScaleType.Fit
@@ -7838,7 +7838,7 @@ function Compkiller.new(Config : Window)
 				for i,v in next , FullConfig do
 					local Button = TabArgs:_DrawConfig();
 
-					Button:SetInfo(v.Info.Author,v.Name);
+					Button:SetInfo(Players.LocalPlayer.Name,v.Name);
 
 					table.insert(__signals,TabOpenSignal:Connect(function(v)
 						Button:Toggle(v);
