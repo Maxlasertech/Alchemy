@@ -6,11 +6,6 @@
     Github: https://github.com/4lpaca-pin/CompKiller
     Version: 2.4
     Original: compkiller.net
-
-        Version: 2.4
-    - Fixed some bug
-    - Added Secure mode > Compkiller:Security("Cache-Directory")
-        Secure mode: this will cache all images to your workspace and disabled blur
 --]]
 
 --- Export Types ---
@@ -108,7 +103,8 @@ export type Category = {
 
 export type Section = {
 	Name: string,
-	Position: string
+	Position: string,
+	Closed: boolean
 };
 
 export type Toggle = {
@@ -328,7 +324,7 @@ local cloneref: cloneref = cloneref or function(f) return f end;
 local TweenService: TweenService = cloneref(game:GetService('TweenService'));
 local UserInputService: UserInputService = cloneref(game:GetService('UserInputService'));
 local TextService: TextService = cloneref(game:GetService('TextService'));
-local RunService: RunService = cloneref(game:GetService('RunService'));
+local GuiService: GuiService = cloneref(game:GetService('GuiService'));
 local Players: Players = cloneref(game:GetService('Players'));
 local HttpService: HttpService = cloneref(game:GetService('HttpService'));
 local LocalPlayer: Player = Players.LocalPlayer;
@@ -1447,7 +1443,7 @@ function Compkiller:_RandomString() : string
 	return "CK="..string.char(math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102),math.random(64,102));	
 end;
 
-function Compkiller:_GetAlias(Config: table)
+function Compkiller:_GetAlias(Config: {any})
 	local b = table.clone(Config)
 	if not b.Default then
 		b.Default = b.Value
@@ -1486,7 +1482,7 @@ function Compkiller:_GetAlias(Config: table)
 		b.Content = b.Tooltip
 	end
 	if not b.Flag then
-		local ExistedFlags: table = {}
+		local ExistedFlags: {any} = {}
 
 		local Flag = b.Name:gsub(' ', '_')
 
@@ -1522,7 +1518,7 @@ function Compkiller:_Rounding(num: number, numDecimalPlaces: number) : number
 	return math.floor(num * mult + 0.5) / mult;
 end;
 
-function Compkiller:_Animation(Self: Instance , Info: TweenInfo , Property :{[K] : V})
+function Compkiller:_Animation(Self: Instance, Info: TweenInfo, Property: {[string] : any})
 	local Tween = TweenService:Create(Self , Info or TweenInfo.new(0.25) , Property);
 
 	Tween:Play();
@@ -1544,6 +1540,53 @@ function Compkiller:_Input(Frame : Frame , Callback : () -> ()) : TextButton
 
 	return Button;
 end;
+
+function Compkiller:CreateMobileButton(Flag: {any}, Position: UDim2, Parent: ScreenGui): TextButton
+    if not self:_IsMobile() then
+        return;
+    end
+    
+    local Button = Instance.new('TextButton', Parent);
+	Button.ZIndex = 20;
+	Button.Size = UDim2.fromOffset(40, 40)
+    Button.AnchorPoint = Vector2.new(0.5, 0.5)
+    Button.BackgroundColor3 = Flag:GetValue() and Color3.new(0, 1, 0) or Color3.new()
+	Button.BackgroundTransparency = 0.5;
+	Button.TextColor3 = Color3.new(1, 1, 1)
+    Button.Text = Flag.Name
+    Button.Position = Position;
+    Button.TextScaled = true;   
+    
+    local time, enter = 0, nil;
+
+    Button.MouseButton1Down:Connect(function()
+        enter, time = true, os.clock();
+
+        repeat task.wait() until not enter or (os.clock() - time) > 1;
+
+        if not enter then
+            return;
+        end
+
+        Button:Destroy();
+    end);
+
+    Button.MouseButton1Up:Connect(function()
+        enter = false;
+    end);
+
+    Button.MouseButton1Click:Connect(function()
+        local New: boolean = not Flag:GetValue();
+        
+        self:_Animation(Button, nil, {
+            BackgroundColor3 = Flag.SetValue(New) and Color3.new(0, 1, 0) or Color3.new()
+        })
+    end)
+
+    Instance.new('UICorner', Button).CornerRadius = UDim.new(1, 0)
+
+    return Button;
+end
 
 function Compkiller:GetCalculatePosition(planePos: number, planeNormal: number, rayOrigin: number, rayDirection: number) : number
 	local n = planeNormal;
@@ -2506,9 +2549,9 @@ Compkiller.Hash = function(str: string)
 end;
 
 function Compkiller:CacheImage(id: string) : string
-	if not Compkiller.SecureMode or not id or not id:byte() then
-		return "";
-	end;
+	if true then
+		return id
+	end
 
 	assert(Compkiller.SecureMode , "please use Compkiller:Security(< string >) before cache image")
 	assert(Compkiller.CacheDirectory , "please use Compkiller:Security(< string >) before cache image")
@@ -3958,7 +4001,9 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 
 			Block:SetTransparency((Config.Default and 0.1) or 0.3);
 
-			Config.Callback(Config.Default);
+			task.spawn(Config.Callback, Config.Default);
+            
+            return Config.Default;
 		end;
 
 		Args.Signal = Signal:Connect(function(bool)
@@ -4008,7 +4053,7 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 
 		local Keybind = Block:AddLink('Keybind' , Config.Default);
 
-		local IsBinding = false;
+		local IsBinding, Button = false, nil;
 
 		local IsBlacklist = function(v)
 			return Config.Blacklist and (Config.Blacklist[v] or table.find(Config.Blacklist,v))
@@ -4019,48 +4064,71 @@ function Compkiller:_LoadElement(Parent: Frame , EnabledLine: boolean , Signal)
 				return;
 			end;
 
+            if Compkiller:_IsMobile() and Button and Button.Parent then
+                Button:Destroy()
+            end
+
+            IsBinding = true;
 			Keybind.SetValue("...");
 
 			local Selected = nil;
 
 			while not Selected do
-				local Key = UserInputService.InputBegan:Wait();
+				local Key = Compkiller:_IsMobile() or UserInputService.InputBegan:Wait();
 
-				if Key.KeyCode ~= Enum.KeyCode.Unknown and not IsBlacklist(Key.KeyCode) and not IsBlacklist(Key.KeyCode.Name) then
-					Selected = Key.KeyCode;
-				else
-					if Key.UserInputType == Enum.UserInputType.MouseButton1 and not IsBlacklist(Enum.UserInputType.MouseButton1) and not IsBlacklist("MouseLeft") then
-						Selected = "MouseLeft";
-					elseif Key.UserInputType == Enum.UserInputType.MouseButton2 and not IsBlacklist(Enum.UserInputType.MouseButton2) and not IsBlacklist("MouseRight") then
-						Selected = "MouseRight";
-					end;
-				end;
+                task.wait()
+
+                if Key and typeof(Key) ~= 'boolean' then
+                    if Key.KeyCode ~= Enum.KeyCode.Unknown and not IsBlacklist(Key.KeyCode) and not IsBlacklist(Key.KeyCode.Name) then
+                        Selected = Key.KeyCode;
+                    else
+                        if Key.UserInputType == Enum.UserInputType.MouseButton1 and not IsBlacklist(Enum.UserInputType.MouseButton1) and not IsBlacklist("MouseLeft") then
+                            Selected = "MouseLeft";
+                        elseif Key.UserInputType == Enum.UserInputType.MouseButton2 and not IsBlacklist(Enum.UserInputType.MouseButton2) and not IsBlacklist("MouseRight") then
+                            Selected = "MouseRight";
+                        end;
+                    end;
+                elseif Compkiller:_IsMobile() and not IsBinding then
+                    Selected = 'MobileButton'
+                    break
+                end
 			end;
 
-			local KeyName = typeof(Selected) == "string" and Selected or Selected.Name;
+            local KeyName = typeof(Selected) == "string" and Selected or Selected.Name;
 
-			Config.Default = KeyName;
+            Config.Default = KeyName;
 
-			Keybind.SetValue(Selected);
+            Keybind.SetValue(Selected);
 
-			IsBinding = false;
+            IsBinding = false;
 
-			Config.Callback(KeyName);
+            Config.Callback(KeyName);
 		end);
-
-		UserInputService.InputBegan:Connect(function(input, gameProcessed: boolean)
-            if gameProcessed then return end
-            if typeof(Config.Default) == 'string' and input.KeyCode == Enum.KeyCode[Config.Default] and Config.Callback then
-                pcall(Config.Callback)
-            end
-        end)
 
 		local Args = {};
 
+        UserInputService.InputBegan:Connect(function(input, gameProcessed: boolean)
+            if gameProcessed then return end
+            if typeof(Config.Default) == 'string' and Config.Default ~= 'MobileButton' and input.KeyCode == Enum.KeyCode[Config.Default] and Config.Callback then
+                pcall(Config.Callback)
+            elseif input.UserInputType == Enum.UserInputType.MouseButton1 and IsBinding and Compkiller:_IsMobile() then
+                local Position = input.Position + Vector3.new(0, GuiService:GetGuiInset().Y, 0)
+
+                Button = Compkiller:CreateMobileButton(Args, UDim2.fromOffset(Position.X, Position.Y), Parent.Parent.Parent.Parent.Parent.Parent.Parent.Parent)
+                
+                IsBinding = false
+            end
+        end)
+
 		Args.Flag = Config.Flag;
+        Args.Name = Config.Name
 		
 		function Args:SetText(str : string)
 			Block:SetText(str or Config.Name);
+            
+            if Button and Button.Parent then
+                Button.Text = str or Config.Name;
+            end
 		end;
 		
 		function Args:SetValue(value)
@@ -8499,7 +8567,7 @@ function Compkiller.new(Config : Window)
 			SectionClose.Position = UDim2.new(1, -12, 0.5, 0)
 			SectionClose.Size = UDim2.new(0, 17, 0, 17)
 			SectionClose.ZIndex = 10
-			SectionClose.Image = Compkiller:CacheImage("rbxassetid://10709790948")
+			SectionClose.Image = 'rbxassetid://10709790948'
 			SectionClose.ImageTransparency = 0.500
 
 			if not SectionText.Text:byte() then
@@ -8650,7 +8718,7 @@ function Compkiller.new(Config : Window)
 				end;
 			end);
 
-			Compkiller:_Input(Header,function()
+			local Open = function()
 				IsOpen = not IsOpen;
 
 				if IsOpen then
@@ -8666,7 +8734,9 @@ function Compkiller.new(Config : Window)
 				refresh();
 
 				refreshScale();
-			end);
+			end
+			
+			Compkiller:_Input(Header, Open);
 
 			Header.MouseEnter:Connect(function()
 				Compkiller:_Animation(SectionText,TweenInfo.new(0.2),{
@@ -8679,6 +8749,10 @@ function Compkiller.new(Config : Window)
 					TextTransparency = 0.500
 				})
 			end)
+
+			if config.Closed then
+				task.spawn(Open)
+			end
 
 			return Compkiller:_LoadElement(Section , true , TabOpenSignal)
 		end;
@@ -9366,8 +9440,6 @@ function Compkiller:ConfigManager(ConfigManager: ConfigManager) : ConfigFunction
 	function Args:LoadConfig(ConfigName: string)
 		local _path = Compkiller:_Path(Args.Directory,ConfigName);
 
-        print(_path, isfile(_path))
-
 		if isfile(_path) then
 			local info = readfile(_path);
 
@@ -9383,20 +9455,20 @@ function Compkiller:ConfigManager(ConfigManager: ConfigManager) : ConfigFunction
 				})
 			end
 
-			for i,v in next , decoded do
-				warn(i, v and v.Flag)
+			for i,v in next, decoded do
 				if v and v.Flag then
-
 					local Value = Flags[v.Flag];
 
 					if Value then
-
 						if v.Value.Type == "NormalElement" then
 							task.spawn(function()
 								Value.Functions:SetValue(v.Value.Value);
 							end)
-						elseif v.Value.Type == "ColorPicker" then
 
+                            if v.Value.Position and Value.Functions.SetPosition then
+                                Value.Functions:SetPosition(v.Value.Position)
+                            end
+						elseif v.Value.Type == "ColorPicker" then
 							local Color = Color3.new(v.Value.Color3.R,v.Value.Color3.G,v.Value.Color3.B);
 
 							local Transparency = v.Value.Transparency;
